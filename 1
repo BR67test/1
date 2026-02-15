@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Команды настройки настройки</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0b1a2f;
+            margin: 0;
+            padding: 20px;
+            color: #e6edf3;
+        }
+        h1 {
+            text-align: center;
+            font-weight: 500;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            color: #ffd966;
+            text-shadow: 0 2px 5px #00000060;
+        }
+        h2 {
+            background: #1e3b5c;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px 10px 10px 40px;
+            font-weight: 500;
+            font-size: 1.8rem;
+            margin: 40px 0 20px 0;
+            border-left: 8px solid #ffb347;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        h3 {
+            font-weight: 500;
+            color: #b8d8fc;
+            margin: 30px 0 10px 0;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #2e4e6e;
+            padding-bottom: 5px;
+        }
+        .table-container {
+            overflow-x: auto;
+            border-radius: 18px;
+            background: #112436;
+            box-shadow: 0 20px 30px -10px black;
+            margin-bottom: 30px;
+            border: 1px solid #2e5270;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 900px;
+        }
+        th {
+            background: #0d2a41;
+            color: #ffde9e;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            font-size: 0.9rem;
+            padding: 16px 8px;
+            border-bottom: 3px solid #f39c12;
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #1e405b;
+            vertical-align: top;
+        }
+        tr:hover td {
+            background: #173e5a;
+        }
+        .step {
+            font-weight: 700;
+            color: #f1c40f;
+            text-align: center;
+        }
+        .cmd {
+            font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+            background: #06212e;
+            padding: 6px 10px;
+            border-radius: 12px;
+            color: #a6e22e;
+            display: inline-block;
+            margin: 2px 0;
+            border-left: 4px solid #2ecc71;
+            word-break: break-word;
+            max-width: 100%;
+        }
+        .check {
+            font-family: 'JetBrains Mono', monospace;
+            background: #1a2f3f;
+            padding: 6px 10px;
+            border-radius: 12px;
+            color: #7dc4ff;
+            display: inline-block;
+            margin: 2px 0;
+            border-left: 4px solid #3498db;
+        }
+        .machine-tag {
+            background: #c44536;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .note {
+            background: #2d4d3b;
+            color: #d4edda;
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin: 10px 0 20px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        footer {
+            text-align: center;
+            margin: 50px 0 20px;
+            color: #6688aa;
+        }
+    </style>
+</head>
+<body>
+    
+    <p style="text-align:center; color:#bbb; max-width:900px; margin:0 auto 30px;">🔹 <span style="background:#2ecc71; color:#000; padding:3px 12px; border-radius:30px;">зелёный</span> — команда выполнения &nbsp;&nbsp; 🔹 <span style="background:#3498db; color:#000; padding:3px 12px; border-radius:30px;">синий</span> — проверка</p>
+
+    <!-- ЧАСТЬ 1 – СЕТЬ -->
+    <h2>🌐 ЧАСТЬ 1 · СЕТЬ (имена, IP, NTP, базовые сервисы)</h2>
+
+    <!-- ======== rtr-cod ======== -->
+    <h3>📌 rtr-cod (EcoRouter)</h3>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>#</th><th>Действие</th><th>Команда / проверка</th></tr></thead>
+            <tbody>
+                <tr><td class="step">1</td><td>Базовое имя</td><td><span class="cmd">enable → configure terminal → hostname rtr-cod</span><br><span class="check">show hostname</span></td></tr>
+                <tr><td class="step">2</td><td>Доменное имя</td><td><span class="cmd">ip domain-name cod.ssa2026.region</span><br><span class="check">show running-config | include domain-name</span></td></tr>
+                <tr><td class="step">3</td><td>Интерфейс isp</td><td><span class="cmd">interface isp<br>ip address 178.207.179.4/29<br>description "Connecting to an ISP provider"<br>exit</span><br><span class="check">show ip interface brief</span></td></tr>
+                <tr><td class="step">4</td><td>Интерфейс fw-cod</td><td><span class="cmd">interface fw-cod<br>ip address 172.16.1.1/30<br>description "Connecting to fw-cod"<br>exit</span><br><span class="check">show ip interface brief</span></td></tr>
+                <tr><td class="step">5</td><td>Service Instance te0 (ISP)</td><td><span class="cmd">port te0<br>service-instance te0/isp<br>encapsulation untagged<br>connect ip interface isp<br>exit<br>exit</span><br><span class="check">show service-instance brief</span></td></tr>
+                <tr><td class="step">6</td><td>Service Instance te1 (fw-cod)</td><td><span class="cmd">port te1<br>service-instance te1/fw-cod<br>encapsulation untagged<br>connect ip interface fw-cod<br>exit<br>exit</span><br><span class="check">show service-instance brief</span></td></tr>
+                <tr><td class="step">7</td><td>Сохранение</td><td><span class="cmd">write memory</span></td></tr>
+                <tr><td class="step">8</td><td>BGP процесс</td><td><span class="cmd">configure terminal<br>router bgp 64500</span><br><span class="check">show ip bgp summary</span></td></tr>
+                <tr><td class="step">9</td><td>Router‑ID</td><td><span class="cmd">bgp router-id 178.207.179.4</span><br><span class="check">show ip bgp summary</span></td></tr>
+                <tr><td class="step">10</td><td>Сосед ISP</td><td><span class="cmd">neighbor 178.207.179.1 remote-as 31133<br>exit</span><br><span class="check">show ip bgp summary</span></td></tr>
+                <tr><td class="step">11</td><td>GRE туннель</td><td><span class="cmd">interface tunnel.0<br>ip address 10.10.10.1/30<br>ip tunnel 178.207.179.4 178.207.179.28 mode gre<br>exit</span><br><span class="check">show interface tunnel.0</span></td></tr>
+                <tr><td class="step">12</td><td>NAT outside isp</td><td><span class="cmd">interface isp<br>ip nat outside<br>exit</span></td></tr>
+                <tr><td class="step">13</td><td>NAT inside fw-cod</td><td><span class="cmd">interface fw-cod<br>ip nat inside<br>exit</span></td></tr>
+                <tr><td class="step">14</td><td>NAT pool fw‑cod</td><td><span class="cmd">ip nat pool fw-cod 172.16.1.1-172.16.1.2</span></td></tr>
+                <tr><td class="step">15</td><td>NAT pool vlan100</td><td><span class="cmd">ip nat pool vlan100 192.168.10.1-192.168.10.254</span></td></tr>
+                <tr><td class="step">16</td><td>NAT pool vlan300</td><td><span class="cmd">ip nat pool vlan300 192.168.30.1-192.168.30.254</span></td></tr>
+                <tr><td class="step">17</td><td>NAT pool vlan400</td><td><span class="cmd">ip nat pool vlan400 192.168.40.1-192.168.40.254</span></td></tr>
+                <tr><td class="step">18</td><td>NAT pool vlan500</td><td><span class="cmd">ip nat pool vlan500 192.168.50.1-192.168.50.254</span></td></tr>
+                <tr><td class="step">19</td><td>Правило NAT fw‑cod</td><td><span class="cmd">ip nat source dynamic inside pool fw-cod overload interface isp</span><br><span class="check">show ip nat translations</span></td></tr>
+                <tr><td class="step">20</td><td>Правило NAT vlan100</td><td><span class="cmd">ip nat source dynamic inside pool vlan100 overload interface isp</span></td></tr>
+                <tr><td class="step">21</td><td>Правило NAT vlan300</td><td><span class="cmd">ip nat source dynamic inside pool vlan300 overload interface isp</span></td></tr>
+                <tr><td class="step">22</td><td>Правило NAT vlan400</td><td><span class="cmd">ip nat source dynamic inside pool vlan400 overload interface isp</span></td></tr>
+                <tr><td class="step">23</td><td>Правило NAT vlan500</td><td><span class="cmd">ip nat source dynamic inside pool vlan500 overload interface isp</span></td></tr>
+                <tr><td class="step">24</td><td>Статика к vlan100</td><td><span class="cmd">ip route 192.168.10.0/24 172.16.1.2</span></td></tr>
+                <tr><td class="step">25</td><td>Статика к vlan300</td><td><span class="cmd">ip route 192.168.30.0/24 172.16.1.2</span></td></tr>
+                <tr><td class="step">26</td><td>Статика к vlan400</td><td><span class="cmd">ip route 192.168.40.0/24 172.16.1.2</span></td></tr>
+                <tr><td class="step">27</td><td>Статика к vlan500</td><td><span class="cmd">ip route 192.168.50.0/24 172.16.1.2</span><br><span class="check">show ip route</span></td></tr>
+                <tr><td class="step">28</td><td>OSPF процесс</td><td><span class="cmd">router ospf 1</span></td></tr>
+                <tr><td class="step">29</td><td>Router‑ID OSPF</td><td><span class="cmd">router-id 10.10.10.1</span></td></tr>
+                <tr><td class="step">30</td><td>Passive‑interface default</td><td><span class="cmd">passive-interface default</span></td></tr>
+                <tr><td class="step">31</td><td>Активировать туннель</td><td><span class="cmd">no passive-interface tunnel.0</span></td></tr>
+                <tr><td class="step">32</td><td>Redistribute static</td><td><span class="cmd">redistribute static</span></td></tr>
+                <tr><td class="step">33</td><td>Сети в area 0</td><td><span class="cmd">network 10.10.10.0/30 area 0<br>network 172.16.1.0/30 area 0<br>exit</span></td></tr>
+                <tr><td class="step">34</td><td>Аутентификация туннеля</td><td><span class="cmd">interface tunnel.0<br>ip ospf authentication message-digest<br>ip ospf message-digest-key 1 md5 P@ssw0rd<br>exit</span></td></tr>
+                <tr><td class="step">35</td><td>NTP</td><td><span class="cmd">ntp timezone utc+3<br>ntp server 100.100.100.100</span><br><span class="check">show ntp status</span></td></tr>
+                <tr><td class="step">36</td><td>SNMP</td><td><span class="cmd">snmp-server enable snmp<br>snmp-server community public ro</span></td></tr>
+                <tr><td class="step">37</td><td>RADIUS‑сервер</td><td><span class="cmd">security none<br>aaa radius-server 192.168.10.1 port 1812 secret P@ssw0rd auth<br>aaa precedence local radius</span></td></tr>
+                <tr><td class="step">38</td><td>Финальное сохранение</td><td><span class="cmd">write memory</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== rtr-a ======== -->
+    <h3>📌 rtr-a (EcoRouter)</h3>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>#</th><th>Действие</th><th>Команда / проверка</th></tr></thead>
+            <tbody>
+                <tr><td class="step">1</td><td>Имя + домен</td><td><span class="cmd">hostname rtr-a<br>ip domain-name office.ssa2026.region</span><br><span class="check">show hostname</span></td></tr>
+                <tr><td class="step">2</td><td>Интерфейс isp</td><td><span class="cmd">interface isp<br>ip address 178.207.179.28/29<br>exit</span></td></tr>
+                <tr><td class="step">3</td><td>Интерфейс vl100</td><td><span class="cmd">interface vl100<br>ip address 172.20.10.254/24<br>exit</span></td></tr>
+                <tr><td class="step">4</td><td>Интерфейс vl200</td><td><span class="cmd">interface vl200<br>ip address 172.20.20.254/24<br>exit</span></td></tr>
+                <tr><td class="step">5</td><td>Интерфейс vl300</td><td><span class="cmd">interface vl300<br>ip address 172.20.30.254/24<br>exit</span></td></tr>
+                <tr><td class="step">6</td><td>Service Instance te0 (ISP)</td><td><span class="cmd">port te0<br>service-instance te0/isp<br>encapsulation untagged<br>connect ip interface isp<br>exit<br>exit</span></td></tr>
+                <tr><td class="step">7</td><td>Service‑instance vl100</td><td><span class="cmd">port te1<br>service-instance te1/vl100<br>encapsulation dot1q 100<br>rewrite pop 1<br>connect ip interface vl100<br>exit</span></td></tr>
+                <tr><td class="step">8</td><td>Service‑instance vl200</td><td><span class="cmd">service-instance te1/vl200<br>encapsulation dot1q 200<br>rewrite pop 1<br>connect ip interface vl200<br>exit</span></td></tr>
+                <tr><td class="step">9</td><td>Service‑instance vl300</td><td><span class="cmd">service-instance te1/vl300<br>encapsulation dot1q 300<br>rewrite pop 1<br>connect ip interface vl300<br>exit<br>exit</span></td></tr>
+                <tr><td class="step">10</td><td>Статический маршрут</td><td><span class="cmd">ip route 0.0.0.0/0 178.207.179.25</span><br><span class="check">show ip route static</span></td></tr>
+                <tr><td class="step">11</td><td>GRE туннель</td><td><span class="cmd">interface tunnel.0<br>ip address 10.10.10.2/30<br>ip tunnel 178.207.179.28 178.207.179.4 mode gre<br>exit</span><br><span class="check">show interface tunnel.0, ping 10.10.10.1</span></td></tr>
+                <tr><td class="step">12</td><td>NAT outside isp</td><td><span class="cmd">interface isp<br>ip nat outside</span></td></tr>
+                <tr><td class="step">13</td><td>NAT inside vl100/vl200/vl300</td><td><span class="cmd">interface vl100<br>ip nat inside<br>exit<br>interface vl200<br>ip nat inside<br>exit<br>interface vl300<br>ip nat inside<br>exit</span></td></tr>
+                <tr><td class="step">14</td><td>NAT pool office</td><td><span class="cmd">ip nat pool office 172.20.0.0-172.20.255.255</span></td></tr>
+                <tr><td class="step">15</td><td>NAT правило</td><td><span class="cmd">ip nat source dynamic inside pool office overload interface isp</span><br><span class="check">show ip nat translations</span></td></tr>
+                <tr><td class="step">16</td><td>OSPF (аналогично rtr-cod)</td><td><span class="cmd">router ospf 1<br>router-id 10.10.10.2<br>passive-interface default<br>no passive-interface tunnel.0<br>network 10.10.10.0/30 area 0<br>network 172.20.10.0/24 area 0<br>network 172.20.20.0/24 area 0<br>network 172.20.30.0/24 area 0<br>exit</span></td></tr>
+                <tr><td class="step">17</td><td>Аутентификация туннеля</td><td><span class="cmd">interface tunnel.0<br>ip ospf authentication message-digest<br>ip ospf message-digest-key 1 md5 P@ssw0rd<br>exit</span></td></tr>
+                <tr><td class="step">18</td><td>NTP, SNMP</td><td><span class="cmd">ntp timezone utc+3<br>ntp server 100.100.100.100<br>snmp-server enable snmp<br>snmp-server community public ro</span></td></tr>
+                <tr><td class="step">19</td><td>Сохранение</td><td><span class="cmd">write memory</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== fw-cod (Ideco) ======== -->
+    <h3>📌 fw-cod (Ideco, локальная консоль + веб)</h3>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>#</th><th>Действие</th><th>Команда / действие</th></tr></thead>
+            <tbody>
+                <tr><td class="step">1</td><td>Создание админа</td><td><span class="cmd">логин: admin / пароль: P@ssw0rd1234</span></td></tr>
+                <tr><td class="step">2</td><td>Меню интерфейсов</td><td><span class="cmd">Ethernet-интерфейсы (3) → Создать интерфейс (3)</span></td></tr>
+                <tr><td class="step">3</td><td>Выбор порта</td><td>Выбрать порт (MAC совпадает с rtr-cod)</td></tr>
+                <tr><td class="step">4</td><td>Имя интерфейса</td><td><span class="cmd">to_rtr-cod</span></td></tr>
+                <tr><td class="step">5</td><td>Роль LAN</td><td><span class="cmd">LAN</span></td></tr>
+                <tr><td class="step">6</td><td>Контекст</td><td><span class="cmd">Корневой контекст</span></td></tr>
+                <tr><td class="step">7</td><td>Настройка сети</td><td><span class="cmd">Вручную → 172.16.1.2/30</span></td></tr>
+                <tr><td class="step">8</td><td>Временный маршрут</td><td><span class="cmd">ip route add 0.0.0.0/0 via 172.16.1.1</span><br><span class="check">ip r</span></td></tr>
+                <tr><td class="step">9</td><td>Вход в веб</td><td><span class="cmd">https://172.16.1.2:8443 (admin / P@ssw0rd1234)</span></td></tr>
+                <tr><td class="step">10</td><td>Имя устройства</td><td>Общие настройки → <span class="cmd">fw-cod</span></td></tr>
+                <tr><td class="step">11</td><td>Объект gateway</td><td>Объекты → IP-адрес: <span class="cmd">gateway = 172.16.1.1</span></td></tr>
+                <tr><td class="step">12</td><td>Постоянный маршрут</td><td>Сервисы → таблица маршрутизации: название <span class="cmd">to_rtr-cod</span>, шлюз <span class="cmd">gateway</span></td></tr>
+                <tr><td class="step">13</td><td>Лицензия</td><td>Управление сервером → лицензия → автообновление, зарегистрировать</td></tr>
+                <tr><td class="step">14</td><td>Базовый интерфейс</td><td>Сервисы → VLAN: имя <span class="cmd">to_sw1-cod</span> (без конфигурации)</td></tr>
+                <tr><td class="step">15</td><td>VLAN 100</td><td>VLAN: <span class="cmd">vlan100</span> , тег 100, IP 192.168.10.254/24</td></tr>
+                <tr><td class="step">16</td><td>VLAN 300</td><td><span class="cmd">vlan300</span> , тег 300, IP 192.168.30.254/24</td></tr>
+                <tr><td class="step">17</td><td>VLAN 400</td><td><span class="cmd">vlan400</span> , тег 400, IP 192.168.40.254/24</td></tr>
+                <tr><td class="step">18</td><td>VLAN 500</td><td><span class="cmd">vlan500</span> , тег 500, IP 192.168.50.254/24</td></tr>
+                <tr><td class="step">19</td><td>NTP</td><td>Сервисы → NTP‑сервер: добавить 100.100.100.100</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== временный интернет (ALT) ======== -->
+    <h3>📌 ВРЕМЕННЫЙ ИНТЕРНЕТ (ALT, перед установкой OVS)</h3>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>#</th><th>Действие</th><th>Офис (VLAN 300)</th><th>ЦОД (VLAN 300)</th></tr></thead>
+            <tbody>
+                <tr><td class="step">1</td><td>Создать vlan</td><td><span class="cmd">ip link add link ens19 name ens19.300 type vlan id 300</span></td><td><span class="cmd">ip link add link ens19 name ens19.300 type vlan id 300</span></td></tr>
+                <tr><td class="step">2</td><td>Поднять</td><td><span class="cmd">ip link set dev ens19.300 up</span></td><td><span class="cmd">ip link set dev ens19.300 up</span></td></tr>
+                <tr><td class="step">3</td><td>IP адрес</td><td><span class="cmd">ip addr add 172.20.30.X/24 dev ens19.300</span></td><td><span class="cmd">ip addr add 192.168.30.X/24 dev ens19.300</span></td></tr>
+                <tr><td class="step">4</td><td>Шлюз</td><td><span class="cmd">ip route add 0.0.0.0/0 via 172.20.30.254</span></td><td><span class="cmd">ip route add 0.0.0.0/0 via 192.168.30.254</span></td></tr>
+                <tr><td class="step">5</td><td>DNS</td><td><span class="cmd">echo "nameserver 77.88.8.8" > /etc/resolv.conf</span></td><td><span class="cmd">echo "nameserver 77.88.8.8" > /etc/resolv.conf</span></td></tr>
+                <tr><td class="step">6</td><td>Проверка</td><td colspan="2"><span class="check">ping ya.ru</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== имя хоста ALT ======== -->
+    <h3>📌 ИМЯ ХОСТА (все ALT)</h3>
+    <div class="table-container">
+        <table><tbody><tr><td><span class="cmd">hostnamectl set-hostname ПОЛНОЕ_ИМЯ.ssa2026.region; exec bash</span><br><span class="check">hostname -f</span></td></tr></tbody></table>
+    </div>
+
+    <!-- ======== установка OVS ======== -->
+    <h3>📌 УСТАНОВКА OPEN VSWITCH (sw1-a, sw2-a, sw1-cod, sw2-cod)</h3>
+    <div class="table-container">
+        <table><tbody>
+            <tr><td><span class="cmd">apt-get update && apt-get install -y openvswitch</span></td></tr>
+            <tr><td><span class="cmd">systemctl enable --now openvswitch</span><br><span class="check">systemctl status openvswitch</span></td></tr>
+            <tr><td><span class="cmd">sed -i "s/OVS_REMOVE=yes/OVS_REMOVE=no/g" /etc/net/ifaces/default/options</span></td></tr>
+            <tr><td><span class="cmd">reboot</span></td></tr>
+        </tbody></table>
+    </div>
+
+    <!-- ======== поднятие физических портов ALT ======== -->
+    <h3>📌 ПОДНЯТИЕ ФИЗИЧЕСКИХ ПОРТОВ (все ALT)</h3>
+    <div class="table-container">
+        <table><tbody>
+            <tr><td><span class="cmd">mkdir /etc/net/ifaces/ens19 /etc/net/ifaces/ens20 ...</span></td></tr>
+            <tr><td><span class="cmd">echo -e "TYPE=eth\nBOOTPROTO=static" > /etc/net/ifaces/ens19/options</span> (для каждого)</td></tr>
+            <tr><td><span class="cmd">systemctl restart network</span><br><span class="check">ip a</span></td></tr>
+        </tbody></table>
+    </div>
+
+    <!-- ======== sw1-a коммутация ======== -->
+    <h3>📌 sw1-a (ALT, офис) — коммутация</h3>
+    <div class="table-container">
+        <table><tbody>
+            <tr><td><span class="cmd">ovs-vsctl add-br sw1-a</span></td></tr>
+            <tr><td><span class="cmd">ovs-vsctl add-port sw1-a ens20 tag=100</span></td></tr>
+            <tr><td><span class="cmd">ovs-vsctl add-port sw1-a ens19 trunk=100,200,300</span></td></tr>
+            <tr><td><span class="cmd">ovs-vsctl add-port sw1-a ens21 trunk=100,200,300</span></td></tr>
+            <tr><td><span class="cmd">ovs-vsctl add-port sw1-a ens22 trunk=100,200,300</span></td></tr>
+            <tr><td><span class="cmd">modprobe 8021q; echo "8021q" >> /etc/modules</span></td></tr>
+            <tr><td><span class="cmd">mkdir /etc/net/ifaces/mgmt</span></td></tr>
+            <tr><td><span class="cmd">echo -e "TYPE=internal\nBOOTPROTO=static\nCONFIG_IPV4=yes\nBRIDGE=sw1-a\nVID=300" > /etc/net/ifaces/mgmt/options</span></td></tr>
+            <tr><td><span class="cmd">echo "172.20.30.1/24" > /etc/net/ifaces/mgmt/ipv4address</span></td></tr>
+            <tr><td><span class="cmd">echo "default via 172.20.30.254" > /etc/net/ifaces/mgmt/ipv4route</span></td></tr>
+            <tr><td><span class="cmd">systemctl restart network</span><br><span class="check">ip a show mgmt</span></td></tr>
+            <tr><td><span class="cmd">ovs-vsctl set port mgmt vlan_mode=native-untagged</span></td></tr>
+        </tbody></table>
+    </div>
+
+    <!-- ======== sw2-a коммутация ======== (аналогично, но с другими IP) -->
+    <h3>📌 sw2-a (ALT, офис) — коммутация</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">ovs-vsctl add-br sw2-a</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-a ens22 tag=200</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-a ens21 tag=200</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-a ens19 trunk=100,200,300</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-a ens20 trunk=100,200,300</span></td></tr>
+        <tr><td><span class="cmd">modprobe 8021q; echo "8021q" >> /etc/modules</span></td></tr>
+        <tr><td><span class="cmd">mkdir /etc/net/ifaces/mgmt; echo -e "TYPE=internal\nBOOTPROTO=static\nCONFIG_IPV4=yes\nBRIDGE=sw2-a\nVID=300" > /etc/net/ifaces/mgmt/options</span></td></tr>
+        <tr><td><span class="cmd">echo "172.20.30.2/24" > /etc/net/ifaces/mgmt/ipv4address</span></td></tr>
+        <tr><td><span class="cmd">echo "default via 172.20.30.254" > /etc/net/ifaces/mgmt/ipv4route; systemctl restart network</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl set port mgmt vlan_mode=native-untagged</span></td></tr>
+    </tbody></table></div>
+
+    <!-- ======== sw1-cod коммутация ======== -->
+    <h3>📌 sw1-cod (ALT, ЦОД)</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">ovs-vsctl add-br sw1-cod</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw1-cod enp2s29 tag=300</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw1-cod enp2s1 tag=100</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw1-cod enp3s12 tag=200</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw1-cod ens19 trunk=100,200,300,400,500</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-bond sw1-cod bond0 ens21 ens22 bond_mode=active-backup</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl set port bond0 trunk=100,200,300,400,500</span></td></tr>
+        <tr><td><span class="cmd">modprobe 8021q; echo "8021q" >> /etc/modules</span></td></tr>
+        <tr><td><span class="cmd">mkdir /etc/net/ifaces/mgmt-cod; echo -e "TYPE=internal\nBOOTPROTO=static\nCONFIG_IPV4=yes\nBRIDGE=sw1-cod\nVID=300" > /etc/net/ifaces/mgmt-cod/options</span></td></tr>
+        <tr><td><span class="cmd">echo "192.168.30.1/24" > /etc/net/ifaces/mgmt-cod/ipv4address; echo "default via 192.168.30.254" > /etc/net/ifaces/mgmt-cod/ipv4route</span></td></tr>
+        <tr><td><span class="cmd">systemctl restart network; ovs-vsctl set port mgmt-cod vlan_mode=native-untagged</span></td></tr>
+    </tbody></table></div>
+
+    <!-- ======== sw2-cod коммутация ======== -->
+    <h3>📌 sw2-cod (ALT, ЦОД)</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">ovs-vsctl add-br sw2-cod</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-cod ens21 tag=100</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-cod ens22 tag=200</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-cod enp2s29 tag=500</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-port sw2-cod enp3s12 tag=400</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl add-bond sw2-cod bond0 ens19 ens20 bond_mode=active-backup</span></td></tr>
+        <tr><td><span class="cmd">ovs-vsctl set port bond0 trunk=100,200,300,400,500</span></td></tr>
+        <tr><td><span class="cmd">mkdir /etc/net/ifaces/mgmt-cod; echo -e "TYPE=internal\nBOOTPROTO=static\nCONFIG_IPV4=yes\nBRIDGE=sw2-cod\nVID=300" > /etc/net/ifaces/mgmt-cod/options</span></td></tr>
+        <tr><td><span class="cmd">echo "192.168.30.2/24" > /etc/net/ifaces/mgmt-cod/ipv4address; echo "default via 192.168.30.254" > /etc/net/ifaces/mgmt-cod/ipv4route</span></td></tr>
+        <tr><td><span class="cmd">systemctl restart network; ovs-vsctl set port mgmt-cod vlan_mode=native-untagged</span></td></tr>
+    </tbody></table></div>
+
+    <!-- ======== клиенты NetworkManager ======== -->
+    <h3>📌 КЛИЕНТЫ (cli1-a, cli2-a, cli-cod, admin-cod) — NetworkManager</h3>
+    <div class="table-container">
+        <table><tbody>
+            <tr><td><span class="cmd">acc</span> → Ethernet-интерфейсы → F4 → имя → режим NetworkManager (native)</td></tr>
+            <tr><td>Настройки → Сеть → ручной ввод:</td></tr>
+            <tr><td><b>cli1-a (офис):</b> 172.20.20.10/24, шлюз 172.20.20.254, DNS 172.20.10.10</td></tr>
+            <tr><td><b>cli2-a (офис):</b> 172.20.20.11/24, шлюз 172.20.20.254, DNS 172.20.10.10</td></tr>
+            <tr><td><b>cli-cod (ЦОД):</b> 192.168.40.10/24, шлюз 192.168.40.254, DNS 192.168.10.1</td></tr>
+            <tr><td><b>admin-cod (ЦОД):</b> 192.168.30.10/24, шлюз 192.168.30.254, DNS 192.168.10.1</td></tr>
+            <tr><td><span class="check">ip a ; ping 8.8.8.8</span></td></tr>
+        </tbody></table>
+    </div>
+
+    <h2>🧠 ЧАСТЬ 2 · DNS + ДОМЕН</h2>
+    <h3>📌 dc-a (Samba DC)</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">apt-get update && apt-get install -y task-samba-dc bind bind-utils</span></td></tr>
+        <tr><td><span class="cmd">sed -i 's/^/#/' /etc/bind/local.conf</span></td></tr>
+        <tr><td><span class="cmd">control bind-chroot disabled</span></td></tr>
+        <tr><td><span class="cmd">echo 'KRB5RCACHETYPE="none"' >> /etc/sysconfig/bind</span></td></tr>
+        <tr><td><span class="cmd">echo 'include "/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf</span></td></tr>
+        <tr><td><span class="cmd">vi /etc/bind/options.conf</span> (вставить конфиг с listen-on, forwarders)</td></tr>
+        <tr><td><span class="cmd">rm -f /etc/samba/smb.conf; rm -rf /var/cache/samba; mkdir -p /var/lib/samba/sysvol</span></td></tr>
+        <tr><td><span class="cmd">samba-tool domain provision</span> (интерактивно: realm OFFICE.SSA2026.REGION, BIND9_DLZ, пароль)</td></tr>
+        <tr><td><span class="cmd">systemctl enable --now samba bind</span></td></tr>
+        <tr><td><span class="cmd">cp /var/lib/samba/private/krb5.conf /etc/krb5.conf; systemctl restart samba</span></td></tr>
+        <tr><td><span class="check">samba-tool domain info 127.0.0.1</span></td></tr>
+        <tr><td><span class="cmd">echo -e "search office.ssa2026.region\nnameserver 127.0.0.1" > /etc/net/ifaces/ens19/resolv.conf; systemctl restart network</span></td></tr>
+        <tr><td><span class="cmd">samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator</span> (и все остальные записи)</td></tr>
+    </tbody></table></div>
+
+    <h3>📌 srv1-cod (DNS сервер ЦОД)</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">apt-get install -y bind bind-utils</span></td></tr>
+        <tr><td>отредактировать <span class="cmd">/etc/bind/options.conf</span> и <span class="cmd">/etc/bind/local.conf</span> (добавить зоны)</td></tr>
+        <tr><td><span class="cmd">cp /etc/bind/zone/localhost /etc/bind/zone/cod.ssa2026.region; chown root:named ...</span></td></tr>
+        <tr><td><span class="cmd">systemctl enable --now bind</span></td></tr>
+        <tr><td><span class="cmd">echo -e "search cod.ssa2026.region\nnameserver 127.0.0.1" > /etc/net/ifaces/ens19/resolv.conf; systemctl restart network</span></td></tr>
+        <tr><td><span class="check">nslookup srv1-cod.cod.ssa2026.region 127.0.0.1</span></td></tr>
+    </tbody></table></div>
+
+    <h2>⚙️ ЧАСТЬ 3 · ДОПОЛНИТЕЛЬНЫЕ СЕРВИСЫ (если успеете)</h2>
+    <h3>📌 RADIUS на srv1-cod</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">apt-get install -y freeradius freeradius-utils; systemctl enable --now radiusd</span></td></tr>
+        <tr><td>добавить клиента в <span class="cmd">/etc/raddb/clients.conf</span> (rtr-cod, secret P@ssw0rd)</td></tr>
+        <tr><td>добавить пользователя <span class="cmd">/etc/raddb/users: netuser Cleartext-Password := "P@ssw0rd"</span></td></tr>
+        <tr><td><span class="cmd">systemctl restart radiusd</span><br><span class="check">radtest netuser P@ssw0rd 127.0.0.1 0 testing123</span></td></tr>
+    </tbody></table></div>
+
+    <h3>📌 FreePBX на sip-cod</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">vi /etc/sysconfig/network-scripts/ifcfg-eth0</span> → статика 192.168.50.50/24</td></tr>
+        <tr><td><span class="cmd">reboot</span> ; проверить <span class="check">ip a</span></td></tr>
+        <tr><td>в браузере admin-cod <span class="cmd">http://192.168.50.50</span> , создать админа, войти</td></tr>
+        <tr><td>Settings → Advanced Settings → SIP Channel Driver = chan_sip</td></tr>
+        <tr><td>Settings → Asterisk SIP Settings → Bind Port = 5060, Apply Config, перезагрузка</td></tr>
+        <tr><td>Applications → Extensions → добавить SIP номера (101,102...)</td></tr>
+    </tbody></table></div>
+
+    <h3>📌 PostgreSQL на srv2-cod</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">apt-get install -y postgresql17-server; /etc/init.d/postgresql initdb</span></td></tr>
+        <tr><td><span class="cmd">systemctl enable --now postgresql</span></td></tr>
+        <tr><td>в <span class="cmd">/var/lib/pgsql/data/postgresql.conf</span> → listen_addresses = '*'</td></tr>
+        <tr><td>в <span class="cmd">pg_hba.conf</span> → host all all 192.168.0.0/16 md5; <span class="cmd">systemctl restart postgresql</span></td></tr>
+        <tr><td><span class="cmd">createuser -U postgres --superuser --encrypted --pwprompt superadmin</span> (пароль P@ssw0rdSQL)</td></tr>
+        <tr><td><span class="cmd">createdb -U postgres -O superadmin superadmin</span></td></tr>
+    </tbody></table></div>
+
+    <h3>📌 NTP на всех ALT</h3>
+    <div class="table-container"><table><tbody>
+        <tr><td><span class="cmd">timedatectl set-timezone Europe/Moscow</span></td></tr>
+        <tr><td><span class="cmd">echo "server 100.100.100.100 iburst" >> /etc/chrony.conf</span></td></tr>
+        <tr><td><span class="cmd">systemctl restart chronyd</span><br><span class="check">chronyc tracking</span></td></tr>
+    </tbody></table></div>
+
+    <footer> Регион 2022-2026</footer>
+</body>
+</html>
